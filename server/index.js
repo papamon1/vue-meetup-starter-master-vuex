@@ -15,6 +15,7 @@ const meetupsRoutes = require('./routes/meetups'),
       postsRoutes = require('./routes/posts'),
       categoriesRoutes = require('./routes/categories');
 
+      console.log(config.DB_URI)
 mongoose.connect(config.DB_URI, { useNewUrlParser: true })
   .then(() => console.log('DB Connected!'))
   .catch(err => console.log(err));
