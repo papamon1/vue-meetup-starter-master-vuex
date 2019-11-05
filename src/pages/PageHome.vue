@@ -141,8 +141,8 @@
       // }
       ...mapState({
         //reciben una funcion, lo haremos con sintaxis de arrow, y en concreto de arrow que solo tiene un parametro
-        meetups: state => state.meetups,
-        categories: state => state.categories
+        meetups: state => state.meetups.items,
+        categories: state => state.categories.items
       }),
       ...mapGetters(['testingGetter'])
       //Acepta que le pasemos un objeto, si queremos un alias para el getter, le podemos cambiar el nombre pasandoselo como clave del objeto
@@ -152,7 +152,8 @@
     },
     methods:{
       //Mapeamos al contexto de este componente las acicones de vuex
-      ...mapActions(['fetchMeetups', 'fetchCategories'])
+      ...mapActions('meetups',['fetchMeetups']),
+      ...mapActions('categories',['fetchCategories'])
     }
   }
 </script>

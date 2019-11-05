@@ -156,8 +156,8 @@
         computed:{
           ...mapState({
             //reciben una funcion, lo haremos con sintaxis de arrow, y en concreto de arrow que solo tiene un parametro
-            meetup: state => state.meetup,
-            threads: state => state.threads
+            meetup: state => state.meetups.item,
+            threads: state => state.threads.items
           }),
         ...mapGetters(['testingGetter']),            
           meetupCreator(){
@@ -165,7 +165,8 @@
           }
         },
         methods:{
-          ...mapActions(['fetchMeetupById', 'fetchThreads'])
+          ...mapActions('meetups', ['fetchMeetupById']),
+          ...mapActions('threads', ['fetchThreads'])
         }
     }
 </script>
