@@ -146,33 +146,22 @@
 </template>
 
 <script>
-    import axios from 'axios'
-    export default {
-        data(){
-            return{
-                meetup:{},
-                threads:[]
-            }
-        },
+    export default {        
         created(){
             const meetupId = this.$route.params.id
-            debugger
-            axios.get(`/api/v1/meetups/${meetupId}`)
-                .then(res=>{
-                    debugger
-                    this.meetup=res.data
-                })
-            //En este caso tenemos que ver lo que ocurre en la funcion definida en el servidor. Pasamos como parametro con el signo ?
-            axios.get(`/api/v1/threads?meetupId=${meetupId}`)
-                .then(res=>{
-                    this.threads=res.data
-                })
+            this.$store.dispatch('fetchMeetupById', meetupId);
+            this.$store.dispatch('fetchThreads', meetupId);
 
         },
         computed:{
+            meetup(){
+              return this.$store.state.meetup
+            },
+            threads(){
+              return this.$store.state.threads
+            },
             meetupCreator(){
-                //Esto quiere decir, si no lo encuentras... la otra opcion
-                return this.meetup.meetupCreator || ''
+              return this.$store.state.meetup.meetupCreator || {}
             }
         }
     }

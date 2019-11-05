@@ -112,27 +112,22 @@
 <script>
   import axios from 'axios'
   import MeetupItem from '@/components/MeetupItem'
-  export default {
-    data () {
-      return {
-        meetups:[],
-        categories: []
-      }
-    },
-    created () {
-
-      axios.get('/api/v1/meetups')
-        .then(res=>{
-          this.meetups=res.data
-        })
-
-      axios.get('/api/v1/categories')
-        .then(res => {          
-          this.categories = res.data
-        })
+  export default {    
+    created () {      
+      this.$store.dispatch('fetchMeetups');
+      this.$store.dispatch('fetchCategories');
+      
     },
     components:{
       MeetupItem
+    },
+    computed:{
+      meetups(){
+        return this.$store.state.meetups
+      },
+      categories(){
+        return this.$store.state.categories
+      }
     }
   }
 </script>
