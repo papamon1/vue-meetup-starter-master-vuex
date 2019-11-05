@@ -8,6 +8,7 @@
         <AppDropdown />
         <button class="button is-primary is-pulled-right m-r-sm">Create Meetups</button>
         <router-link :to="{name: 'PageMeetupFind'}" class="button is-primary is-pulled-right m-r-sm">All</router-link>
+        <h1>{{ testingGetter }}</h1>
       </div>
       <div class="row columns is-multiline">
          <MeetupItem v-for="meetup in meetups"
@@ -110,24 +111,48 @@
 </template>
 
 <script>
-  import axios from 'axios'
-  import MeetupItem from '@/components/MeetupItem'
+  import MeetupItem from '@/components/MeetupItem'  
+  import {mapActions, mapState, mapGetters} from 'vuex'
   export default {    
     created () {      
-      this.$store.dispatch('fetchMeetups');
-      this.$store.dispatch('fetchCategories');
+      //En vez de hacer la llamada directamente sobre el store
+      // vuex permite utilizar mapActions, para mapear directamente las acciones del store al contexto de este componente
+      // this.$store.dispatch('fetchMeetups');
+      // this.$store.dispatch('fetchCategories');
+
+      //Ahora estan mapeadas a nuestro contexto, ya o noecesitamos llamarlas desde el store
+      this.fetchMeetups()
+      this.fetchCategories()
       
     },
     components:{
-      MeetupItem
+      MeetupItem    
     },
     computed:{
-      meetups(){
-        return this.$store.state.meetups
-      },
-      categories(){
-        return this.$store.state.categories
-      }
+
+      //Aqui hacemos lo mismo. Vemos que lo que devolveríamos sería el estado de nuestro store
+      // En vez de invocarlo desde el store, lo que hacemos es mapearlo directamente para que se le pueda invocar desde nuestro contexto
+
+      // meetups(){
+      //   return this.$store.state.meetups
+      // },
+      // categories(){
+      //   return this.$store.state.categories
+      // }
+      ...mapState({
+        //reciben una funcion, lo haremos con sintaxis de arrow, y en concreto de arrow que solo tiene un parametro
+        meetups: state => state.meetups,
+        categories: state => state.categories
+      }),
+      ...mapGetters(['testingGetter'])
+      //Acepta que le pasemos un objeto, si queremos un alias para el getter, le podemos cambiar el nombre pasandoselo como clave del objeto
+      // ...mapGetters({
+      //   deOtraForma: 'testingGetter'
+      // })
+    },
+    methods:{
+      //Mapeamos al contexto de este componente las acicones de vuex
+      ...mapActions(['fetchMeetups', 'fetchCategories'])
     }
   }
 </script>

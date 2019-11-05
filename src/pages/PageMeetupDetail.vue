@@ -146,23 +146,26 @@
 </template>
 
 <script>
+    import {mapActions, mapState, mapGetters} from 'vuex'
     export default {        
         created(){
             const meetupId = this.$route.params.id
-            this.$store.dispatch('fetchMeetupById', meetupId);
-            this.$store.dispatch('fetchThreads', meetupId);
-
+            this.fetchMeetupById(meetupId)
+            this.fetchThreads(meetupId)            
         },
         computed:{
-            meetup(){
-              return this.$store.state.meetup
-            },
-            threads(){
-              return this.$store.state.threads
-            },
-            meetupCreator(){
-              return this.$store.state.meetup.meetupCreator || {}
-            }
+          ...mapState({
+            //reciben una funcion, lo haremos con sintaxis de arrow, y en concreto de arrow que solo tiene un parametro
+            meetup: state => state.meetup,
+            threads: state => state.threads
+          }),
+        ...mapGetters(['testingGetter']),            
+          meetupCreator(){
+            return this.meetup.meetupCreator || {}
+          }
+        },
+        methods:{
+          ...mapActions(['fetchMeetupById', 'fetchThreads'])
         }
     }
 </script>
