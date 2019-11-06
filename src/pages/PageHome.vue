@@ -1,7 +1,7 @@
-<template>
+<template>  
   <div>
     <AppHero />
-    <div class="container">
+    <div v-if="pageLoader_isDataLoaded" class="container">
       <section class="section">
       <div class="m-b-lg">
         <h1 class="title is-inline">Featured Meetups in "Location"</h1>
@@ -107,12 +107,17 @@
         </div>
       </section>
     </div>
+    <div v-else class="container">
+      <AppSpinner />
+    </div>
   </div>
+  
 </template>
 
 <script>
   import MeetupItem from '@/components/MeetupItem'  
   import {mapActions, mapState, mapGetters} from 'vuex'
+  import pageLoader from '@/mixins/pageLoader'
   export default {    
     created () {      
       //En vez de hacer la llamada directamente sobre el store
@@ -121,13 +126,32 @@
       // this.$store.dispatch('fetchCategories');
 
       //Ahora estan mapeadas a nuestro contexto, ya o noecesitamos llamarlas desde el store
-      this.fetchMeetups()
-      this.fetchCategories()
+
+
+      // Nueva sintaxis jsx en la que hacemos todas las llamadas a las promises sin tenerlas anidadas
+      // quiere decir que cuando se resulevan todas ellas, entonces entra en el bloque then
+
+      Promise.all([this.fetchMeetups(), this.fetchCategories()])
+        .then((results) => this.pageLoader_resolveData())
+        .catch((err) => {
+          console.error(err)
+          this.pageLoader_resolveData()
+        })
+
+      // this.fetchMeetups()
+      //   .then(()=>{
+      //     return this.fetchCategories()
+      //       .then(()=>{
+      //         return this.isDataLoaded=true
+      //     })
+      //   })
+      
       
     },
     components:{
       MeetupItem    
-    },
+    },    
+    mixins:[pageLoader],
     computed:{
 
       //Aqui hacemos lo mismo. Vemos que lo que devolveríamos sería el estado de nuestro store

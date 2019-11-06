@@ -9,14 +9,13 @@ export default{
     },    
     actions:{
         fetchMeetups(context){
-
             context.commit('setItems',{resource:'meetups',items:[]}, {root:true});
             axios.get('/api/v1/meetups')
             .then(res=>{
                 const meetups = res.data;
                 // context.commit('setMeetups',meetups);
                 context.commit('setItems',{resource:'meetups',items:meetups}, {root:true});
-                return context.state.meetups
+                return context.state.items
             })
         },
         fetchMeetupById(context,meetupId){
@@ -28,12 +27,12 @@ export default{
             context.commit('setItem',{resource:'meetups',item:{}}, {root:true});
 
             //En este caso tenemos que ver lo que ocurre en la funcion definida en el servidor. Pasamos como parametro con el signo ?
-            axios.get(`/api/v1/meetups/${meetupId}`)
+            return axios.get(`/api/v1/meetups/${meetupId}`)
             .then(res=>{                
                 const meetup=res.data
                 // context.commit('setMeetup',meetup);
                 context.commit('setItem',{resource:'meetups',item:meetup}, {root:true});
-                return context.state.meetup
+                return context.state.item
             })
         }
     }

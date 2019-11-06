@@ -1,7 +1,9 @@
 <template>
   <div id="app">
     <TheNavbar />
-    <router-view />    
+    <div class="page-wrapper">
+      <router-view />    
+    </div>    
     <TheFooter />
   </div>
 </template>
@@ -49,5 +51,8 @@ export default {
   background-size: cover;
   background-repeat: no-repeat;
   background-attachment: fixed;
+}
+.page-wrapper{
+  min-height: 55vh;
 }
 </style>

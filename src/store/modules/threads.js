@@ -21,7 +21,7 @@ export default{
                     const threads=res.data
                     // context.commit('setThreads',threads);
                     context.commit('setItems',{resource:'threads',items:threads}, {root:true});
-                    return context.state.threads
+                    return context.state.items
                 })
         }
     }

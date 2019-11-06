@@ -8,12 +8,12 @@ export default{
     },    
     actions:{
         fetchCategories(context){
-            axios.get('/api/v1/categories')
+            return axios.get('/api/v1/categories')
             .then(res => {          
                 const categories = res.categories;
                 // context.commit('setCategories',categories);
                 context.commit('setItems',{resource:'categories',items:categories}, {root:true});
-                return context.state.categories
+                return context.state.items
             })
         },
     }
